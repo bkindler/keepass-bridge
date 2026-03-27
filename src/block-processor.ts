@@ -10,7 +10,8 @@ export function registerBlockProcessor(plugin: KeePassBridgePlugin): void {
 
         for (const entryName of entryNames) {
             const row = container.createDiv({ cls: 'keepass-block-row' });
-            row.createSpan({ cls: 'keepass-block-entry-name', text: entryName });
+            row.dataset.entry = entryName;
+            const nameSpan = row.createSpan({ cls: 'keepass-block-entry-name', text: entryName });
 
             const actions = row.createDiv({ cls: 'keepass-block-actions' });
 
@@ -18,7 +19,11 @@ export function registerBlockProcessor(plugin: KeePassBridgePlugin): void {
             userBtn.addEventListener('click', async () => {
                 const entry = await plugin.resolveEntry(entryName);
                 if (entry) {
+                    nameSpan.removeClass('keepass-block-not-found');
                     await copyToClipboard(entry.userName, 'Username', plugin.settings.clipboardTimeout);
+                    plugin.kdbxService.consumeSingleLookup();
+                } else {
+                    nameSpan.addClass('keepass-block-not-found');
                 }
             });
 
@@ -26,7 +31,11 @@ export function registerBlockProcessor(plugin: KeePassBridgePlugin): void {
             passBtn.addEventListener('click', async () => {
                 const entry = await plugin.resolveEntry(entryName);
                 if (entry) {
+                    nameSpan.removeClass('keepass-block-not-found');
                     await copyToClipboard(entry.getPassword(), 'Password', plugin.settings.clipboardTimeout);
+                    plugin.kdbxService.consumeSingleLookup();
+                } else {
+                    nameSpan.addClass('keepass-block-not-found');
                 }
             });
         }

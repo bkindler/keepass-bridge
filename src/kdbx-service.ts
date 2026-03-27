@@ -22,7 +22,7 @@ kdbxweb.CryptoEngine.setArgon2Impl(
             hashLen: length,
             parallelism,
             type,
-        }).then((result: { hash: Uint8Array }) => result.hash.buffer as ArrayBuffer);
+        }).then((result: { hash: Uint8Array }) => new Uint8Array(result.hash).buffer);
     }
 );
 

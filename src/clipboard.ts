@@ -17,8 +17,12 @@ export async function copyToClipboard(value: string, label: string, timeoutSecon
 
     if (timeoutSeconds > 0) {
         clearTimer = setTimeout(async () => {
-            const current = await navigator.clipboard.readText();
-            if (current === value) {
+            try {
+                const current = await navigator.clipboard.readText();
+                if (current === value) {
+                    await navigator.clipboard.writeText('');
+                }
+            } catch {
                 await navigator.clipboard.writeText('');
             }
             clearTimer = null;

@@ -4,6 +4,7 @@ export class AuthModal extends Modal {
     private password = '';
     private readonly onSubmit: (password: string) => void;
     private readonly onCancel: () => void;
+    private resolved = false;
 
     constructor(app: App, onSubmit: (password: string) => void, onCancel: () => void) {
         super(app);
@@ -38,11 +39,16 @@ export class AuthModal extends Modal {
 
     onClose(): void {
         this.contentEl.empty();
+        if (!this.resolved) {
+            this.resolved = true;
+            this.onCancel();
+        }
     }
 
     private submit(): void {
         const pw = this.password;
         this.password = '';
+        this.resolved = true;
         this.close();
         if (pw) {
             this.onSubmit(pw);

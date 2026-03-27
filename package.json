@@ -12,12 +12,12 @@
         "@types/argon2-browser": "^1.18.4",
         "@types/node": "^16.11.6",
         "esbuild": "0.25.5",
+        "obsidian": "latest",
         "tslib": "2.4.0",
         "typescript": "^5.8.3"
     },
     "dependencies": {
         "argon2-browser": "^1.18.0",
-        "kdbxweb": "^2.1.1",
-        "obsidian": "latest"
+        "kdbxweb": "^2.1.1"
     }
 }
