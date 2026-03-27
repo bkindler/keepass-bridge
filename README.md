@@ -86,6 +86,10 @@ The same `.kdbx` file can be shared between this plugin and any KeePass-compatib
 - [hash-wasm](https://github.com/nicolo-ribaudo/nicolo-nicolo-nicolo) -- Argon2 hashing (MIT License)
 - Icons by [Lucide](https://lucide.dev/) (ISC License), bundled with Obsidian
 
+## Author
+
+[Bjoern Kindler](https://www.kindler-dev.de)
+
 ## License
 
 [MIT](LICENSE)
