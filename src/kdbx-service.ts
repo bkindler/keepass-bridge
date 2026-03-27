@@ -1,6 +1,6 @@
 import * as kdbxweb from 'kdbxweb';
-import argon2 from 'argon2-browser';
-import { App, Notice } from 'obsidian';
+import { argon2id, argon2d, argon2i } from 'hash-wasm';
+import { App, Notice, normalizePath } from 'obsidian';
 import type { KeePassBridgeSettings } from './settings';
 import { promptMasterPassword } from './auth-modal';
 
@@ -11,18 +11,21 @@ export interface KeePassEntryInfo {
     getPassword: () => string;
 }
 
-// Initialize Argon2 for KDBX4 support
+// Initialize Argon2 for KDBX4 support using hash-wasm
 kdbxweb.CryptoEngine.setArgon2Impl(
-    (password, salt, memory, iterations, length, parallelism, type, version) => {
-        return argon2.hash({
-            pass: new Uint8Array(password),
+    async (password, salt, memory, iterations, length, parallelism, type, version) => {
+        const t = type as number;
+        const hashFn = t === 2 ? argon2id : t === 1 ? argon2i : argon2d;
+        const hash = await hashFn({
+            password: new Uint8Array(password),
             salt: new Uint8Array(salt),
-            time: iterations,
-            mem: memory,
-            hashLen: length,
+            iterations,
+            memorySize: memory,
+            hashLength: length,
             parallelism,
-            type,
-        }).then((result: { hash: Uint8Array }) => new Uint8Array(result.hash).buffer);
+            outputType: 'binary',
+        });
+        return new Uint8Array(hash).buffer as ArrayBuffer;
     }
 );
 
@@ -51,29 +54,37 @@ export class KdbxService {
     async unlock(): Promise<boolean> {
         if (this.db) return true;
 
-        const settings = this.getSettings();
-        if (!settings.databasePath) {
-            new Notice('KeePass Bridge: No database path configured');
-            return false;
-        }
-
         const password = await promptMasterPassword(this.app);
         if (!password) return false;
 
+        const error = await this.unlockWithPassword(password);
+        if (error) {
+            new Notice(`KeePass Bridge: ${error}`, 10000);
+            return false;
+        }
+        return true;
+    }
+
+    async unlockWithPassword(password: string): Promise<string | null> {
+        if (this.db) return null;
+
+        const settings = this.getSettings();
+        if (!settings.databasePath) {
+            return 'No database path configured';
+        }
+
         try {
-            const dbFile = this.app.vault.getFileByPath(settings.databasePath);
+            const dbFile = this.app.vault.getFileByPath(normalizePath(settings.databasePath));
             if (!dbFile) {
-                new Notice(`KeePass Bridge: Database file not found: ${settings.databasePath}`);
-                return false;
+                return `Database file not found: ${settings.databasePath}`;
             }
             const dbData = await this.app.vault.readBinary(dbFile);
 
             let keyFileData: ArrayBuffer | undefined;
             if (settings.keyFilePath) {
-                const keyFile = this.app.vault.getFileByPath(settings.keyFilePath);
+                const keyFile = this.app.vault.getFileByPath(normalizePath(settings.keyFilePath));
                 if (!keyFile) {
-                    new Notice(`KeePass Bridge: Key file not found: ${settings.keyFilePath}`);
-                    return false;
+                    return `Key file not found: ${settings.keyFilePath}`;
                 }
                 keyFileData = await this.app.vault.readBinary(keyFile);
             }
@@ -85,14 +96,9 @@ export class KdbxService {
 
             this.db = await kdbxweb.Kdbx.load(dbData, credentials);
             this.startSessionTimer();
-            new Notice('KeePass Bridge: Database unlocked');
-            return true;
+            return null;
         } catch (e) {
-            const msg = e instanceof kdbxweb.KdbxError
-                ? `KeePass Bridge: ${e.message}`
-                : 'KeePass Bridge: Failed to unlock database (wrong password?)';
-            new Notice(msg);
-            return false;
+            return e instanceof Error ? e.message : 'Failed to unlock database';
         }
     }
 

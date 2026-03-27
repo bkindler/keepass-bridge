@@ -50,11 +50,7 @@ export default class KeePassBridgePlugin extends Plugin {
     }
 
     async lookupEntry(entryName: string): Promise<void> {
-        const entry = await this.resolveEntry(entryName);
-        if (entry) {
-            showCredentialPopup(this.app, entry, this.settings.clipboardTimeout);
-            this.kdbxService.consumeSingleLookup();
-        }
+        showCredentialPopup(this.app, this.kdbxService, entryName, this.settings.clipboardTimeout);
     }
 
     async resolveEntry(entryName: string): Promise<KeePassEntryInfo | null> {
@@ -88,8 +84,7 @@ export default class KeePassBridgePlugin extends Plugin {
         const allEntries = this.kdbxService.getAllEntries();
 
         new SearchModal(this.app, allEntries, (entry) => {
-            showCredentialPopup(this.app, entry, this.settings.clipboardTimeout);
-            this.kdbxService.consumeSingleLookup();
+            showCredentialPopup(this.app, this.kdbxService, entry.title, this.settings.clipboardTimeout);
         }).open();
     }
 }
