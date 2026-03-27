@@ -17,7 +17,14 @@
 }
 
 .keepass-badge-icon {
-    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+}
+
+.keepass-badge-icon svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--text-muted);
 }
 
 .keepass-badge-text {
@@ -52,14 +59,21 @@
 }
 
 .keepass-block-btn {
-    padding: 2px 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 6px;
     border-radius: 4px;
     border: 1px solid var(--background-modifier-border);
     background: var(--interactive-normal);
     cursor: pointer;
-    font-size: 0.8em;
     color: var(--text-muted);
     transition: background-color 0.15s;
+}
+
+.keepass-block-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
 .keepass-block-btn:hover {

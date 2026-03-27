@@ -1,4 +1,4 @@
-import { MarkdownPostProcessorContext } from 'obsidian';
+import { MarkdownPostProcessorContext, setIcon } from 'obsidian';
 import type KeePassBridgePlugin from './main';
 
 const KEEPASS_PATTERN = /^keepass::(.+)$/;
@@ -18,7 +18,8 @@ export function registerInlineProcessor(plugin: KeePassBridgePlugin): void {
             badge.addClass('keepass-badge');
             badge.setAttribute('data-entry', entryName);
 
-            badge.createSpan({ cls: 'keepass-badge-icon', text: '\uD83D\uDD11' });
+            const iconEl = badge.createSpan({ cls: 'keepass-badge-icon' });
+            setIcon(iconEl, 'key-round');
             badge.createSpan({ cls: 'keepass-badge-text', text: entryName });
 
             badge.addEventListener('click', async () => {

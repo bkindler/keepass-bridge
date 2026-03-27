@@ -1,4 +1,4 @@
-import { MarkdownPostProcessorContext } from 'obsidian';
+import { MarkdownPostProcessorContext, setIcon } from 'obsidian';
 import type KeePassBridgePlugin from './main';
 import { copyToClipboard } from './clipboard';
 
@@ -15,7 +15,8 @@ export function registerBlockProcessor(plugin: KeePassBridgePlugin): void {
 
             const actions = row.createDiv({ cls: 'keepass-block-actions' });
 
-            const userBtn = actions.createEl('button', { cls: 'keepass-block-btn', text: '\uD83D\uDC64 User' });
+            const userBtn = actions.createEl('button', { cls: 'keepass-block-btn', attr: { 'aria-label': 'Copy username' } });
+            setIcon(userBtn, 'user');
             userBtn.addEventListener('click', async () => {
                 const entry = await plugin.resolveEntry(entryName);
                 if (entry) {
@@ -27,7 +28,8 @@ export function registerBlockProcessor(plugin: KeePassBridgePlugin): void {
                 }
             });
 
-            const passBtn = actions.createEl('button', { cls: 'keepass-block-btn', text: '\uD83D\uDD11 Pass' });
+            const passBtn = actions.createEl('button', { cls: 'keepass-block-btn', attr: { 'aria-label': 'Copy password' } });
+            setIcon(passBtn, 'key-round');
             passBtn.addEventListener('click', async () => {
                 const entry = await plugin.resolveEntry(entryName);
                 if (entry) {
