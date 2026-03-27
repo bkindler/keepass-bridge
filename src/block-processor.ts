@@ -3,7 +3,7 @@ import type KeePassBridgePlugin from './main';
 import { copyToClipboard } from './clipboard';
 
 export function registerBlockProcessor(plugin: KeePassBridgePlugin): void {
-    plugin.registerMarkdownCodeBlockProcessor('keepass', async (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
+    plugin.registerMarkdownCodeBlockProcessor('keepass', (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
         const entryNames = source.trim().split('\n').map(line => line.trim()).filter(line => line.length > 0);
 
         const container = el.createDiv({ cls: 'keepass-block-table' });
@@ -17,28 +17,32 @@ export function registerBlockProcessor(plugin: KeePassBridgePlugin): void {
 
             const userBtn = actions.createEl('button', { cls: 'keepass-block-btn', attr: { 'aria-label': 'Copy username' } });
             setIcon(userBtn, 'user');
-            userBtn.addEventListener('click', async () => {
-                const entry = await plugin.resolveEntry(entryName);
-                if (entry) {
-                    nameSpan.removeClass('keepass-block-not-found');
-                    await copyToClipboard(entry.userName, 'Username', plugin.settings.clipboardTimeout);
-                    plugin.kdbxService.consumeSingleLookup();
-                } else {
-                    nameSpan.addClass('keepass-block-not-found');
-                }
+            userBtn.addEventListener('click', () => {
+                void (async () => {
+                    const entry = await plugin.resolveEntry(entryName);
+                    if (entry) {
+                        nameSpan.removeClass('keepass-block-not-found');
+                        await copyToClipboard(entry.userName, 'Username', plugin.settings.clipboardTimeout);
+                        plugin.kdbxService.consumeSingleLookup();
+                    } else {
+                        nameSpan.addClass('keepass-block-not-found');
+                    }
+                })();
             });
 
             const passBtn = actions.createEl('button', { cls: 'keepass-block-btn', attr: { 'aria-label': 'Copy password' } });
             setIcon(passBtn, 'key-round');
-            passBtn.addEventListener('click', async () => {
-                const entry = await plugin.resolveEntry(entryName);
-                if (entry) {
-                    nameSpan.removeClass('keepass-block-not-found');
-                    await copyToClipboard(entry.getPassword(), 'Password', plugin.settings.clipboardTimeout);
-                    plugin.kdbxService.consumeSingleLookup();
-                } else {
-                    nameSpan.addClass('keepass-block-not-found');
-                }
+            passBtn.addEventListener('click', () => {
+                void (async () => {
+                    const entry = await plugin.resolveEntry(entryName);
+                    if (entry) {
+                        nameSpan.removeClass('keepass-block-not-found');
+                        await copyToClipboard(entry.getPassword(), 'Password', plugin.settings.clipboardTimeout);
+                        plugin.kdbxService.consumeSingleLookup();
+                    } else {
+                        nameSpan.addClass('keepass-block-not-found');
+                    }
+                })();
             });
         }
     });

@@ -14,7 +14,7 @@ export class AuthModal extends Modal {
 
     onOpen(): void {
         const { contentEl } = this;
-        this.setTitle('KeePass: Master Password');
+        this.setTitle('KeePass: Master password');
 
         new Setting(contentEl)
             .setName('Password')

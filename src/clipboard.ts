@@ -16,16 +16,18 @@ export async function copyToClipboard(value: string, label: string, timeoutSecon
     clearPendingClipboard();
 
     if (timeoutSeconds > 0) {
-        clearTimer = setTimeout(async () => {
-            try {
-                const current = await navigator.clipboard.readText();
-                if (current === value) {
+        clearTimer = setTimeout(() => {
+            void (async () => {
+                try {
+                    const current = await navigator.clipboard.readText();
+                    if (current === value) {
+                        await navigator.clipboard.writeText('');
+                    }
+                } catch {
                     await navigator.clipboard.writeText('');
                 }
-            } catch {
-                await navigator.clipboard.writeText('');
-            }
-            clearTimer = null;
+                clearTimer = null;
+            })();
         }, timeoutSeconds * 1000);
     }
 }

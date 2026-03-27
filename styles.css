@@ -85,3 +85,11 @@
     color: var(--text-error);
     font-style: italic;
 }
+
+.keepass-error-banner {
+    color: var(--text-error);
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: var(--background-modifier-error);
+}

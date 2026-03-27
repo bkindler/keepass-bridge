@@ -28,7 +28,7 @@ export default class KeePassBridgePlugin extends Plugin {
             name: 'Lock database',
             callback: () => {
                 this.kdbxService.lock();
-                new Notice('KeePass Bridge: Database locked');
+                new Notice('KeePass Bridge: database locked');
             },
         });
 
@@ -49,7 +49,7 @@ export default class KeePassBridgePlugin extends Plugin {
         await this.saveData(this.settings);
     }
 
-    async lookupEntry(entryName: string): Promise<void> {
+    lookupEntry(entryName: string): void {
         showCredentialPopup(this.app, this.kdbxService, entryName, this.settings.clipboardTimeout);
     }
 

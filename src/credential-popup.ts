@@ -32,16 +32,10 @@ export class CredentialPopup extends Modal {
     private showPasswordForm(errorMsg?: string): void {
         const { contentEl } = this;
         contentEl.empty();
-        this.setTitle('KeePass: Master Password');
+        this.setTitle('KeePass: Master password');
 
         if (errorMsg) {
-            const errorEl = contentEl.createDiv({ cls: 'keepass-error' });
-            errorEl.setText(errorMsg);
-            errorEl.style.color = 'var(--text-error)';
-            errorEl.style.marginBottom = '12px';
-            errorEl.style.padding = '8px';
-            errorEl.style.borderRadius = '4px';
-            errorEl.style.backgroundColor = 'var(--background-modifier-error)';
+            contentEl.createDiv({ cls: 'keepass-error-banner', text: errorMsg });
         }
 
         let password = '';
@@ -63,7 +57,7 @@ export class CredentialPopup extends Modal {
 
         this.scope.register([], 'Enter', (evt) => {
             evt.preventDefault();
-            this.tryUnlock(password);
+            void this.tryUnlock(password);
         });
     }
 
@@ -72,7 +66,7 @@ export class CredentialPopup extends Modal {
 
         const { contentEl } = this;
         contentEl.empty();
-        this.setTitle('KeePass: Unlocking...');
+        this.setTitle('KeePass: Unlocking\u2026');
         contentEl.createDiv({ text: 'Decrypting database...', cls: 'keepass-loading' });
 
         const error = await this.kdbxService.unlockWithPassword(password);
@@ -101,7 +95,7 @@ export class CredentialPopup extends Modal {
     private showError(msg: string): void {
         const { contentEl } = this;
         contentEl.empty();
-        this.setTitle('KeePass Bridge');
+        this.setTitle('KeePass bridge');
         contentEl.createDiv({ text: msg, cls: 'keepass-error' });
     }
 

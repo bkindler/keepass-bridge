@@ -9,7 +9,7 @@ export class SearchModal extends FuzzySuggestModal<KeePassEntryInfo> {
         super(app);
         this.entries = entries;
         this.onChoose = onChoose;
-        this.setPlaceholder('Search KeePass entries...');
+        this.setPlaceholder('Search entries\u2026');
     }
 
     getItems(): KeePassEntryInfo[] {

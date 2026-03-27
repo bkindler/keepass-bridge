@@ -22,8 +22,8 @@ export function registerInlineProcessor(plugin: KeePassBridgePlugin): void {
             setIcon(iconEl, 'key-round');
             badge.createSpan({ cls: 'keepass-badge-text', text: entryName });
 
-            badge.addEventListener('click', async () => {
-                await plugin.lookupEntry(entryName);
+            badge.addEventListener('click', () => {
+                plugin.lookupEntry(entryName);
             });
 
             codeEl.replaceWith(badge);

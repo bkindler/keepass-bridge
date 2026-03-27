@@ -25,7 +25,7 @@ kdbxweb.CryptoEngine.setArgon2Impl(
             parallelism,
             outputType: 'binary',
         });
-        return new Uint8Array(hash).buffer as ArrayBuffer;
+        return new Uint8Array(hash).buffer;
     }
 );
 
@@ -189,7 +189,7 @@ export class KdbxService {
 
         this.sessionTimer = setTimeout(() => {
             this.lock();
-            new Notice('KeePass Bridge: Session expired, database locked');
+            new Notice('KeePass Bridge: session expired, database locked');
         }, duration);
     }
 }
