@@ -3,7 +3,7 @@
     "name": "KeePass Bridge",
     "version": "1.0.0",
     "minAppVersion": "1.0.0",
-    "description": "Read KeePass databases and look up credentials from your notes",
+    "description": "Read KeePass databases and look up credentials from your notes.",
     "author": "Bjoern Kindler",
     "authorUrl": "https://www.kindler-dev.de",
     "isDesktopOnly": false
