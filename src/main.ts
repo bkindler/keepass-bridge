@@ -28,7 +28,7 @@ export default class KeePassBridgePlugin extends Plugin {
             name: 'Lock database',
             callback: () => {
                 this.kdbxService.lock();
-                new Notice('KeePass bridge: database locked');
+                new Notice('Database locked');
             },
         });
 
@@ -62,7 +62,7 @@ export default class KeePassBridgePlugin extends Plugin {
         const matches = this.kdbxService.findEntry(entryName);
 
         if (matches.length === 0) {
-            new Notice(`KeePass bridge: entry "${entryName}" not found`);
+            new Notice(`Entry "${entryName}" not found`);
             return null;
         }
 
