@@ -32,7 +32,7 @@ export class CredentialPopup extends Modal {
     private showPasswordForm(errorMsg?: string): void {
         const { contentEl } = this;
         contentEl.empty();
-        this.setTitle('KeePass: Master password');
+        this.setTitle('Master password');
 
         if (errorMsg) {
             contentEl.createDiv({ cls: 'keepass-error-banner', text: errorMsg });
@@ -66,7 +66,7 @@ export class CredentialPopup extends Modal {
 
         const { contentEl } = this;
         contentEl.empty();
-        this.setTitle('KeePass: Unlocking\u2026');
+        this.setTitle('Unlocking\u2026');
         contentEl.createDiv({ text: 'Decrypting database...', cls: 'keepass-loading' });
 
         const error = await this.kdbxService.unlockWithPassword(password);
@@ -95,7 +95,7 @@ export class CredentialPopup extends Modal {
     private showError(msg: string): void {
         const { contentEl } = this;
         contentEl.empty();
-        this.setTitle('KeePass bridge');
+        this.setTitle('Error');
         contentEl.createDiv({ text: msg, cls: 'keepass-error' });
     }
 

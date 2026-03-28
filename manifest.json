@@ -1,7 +1,7 @@
 {
     "id": "keepass-bridge",
     "name": "KeePass Bridge",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "minAppVersion": "1.0.0",
     "description": "Read KeePass databases and look up credentials from your notes.",
     "author": "Bjoern Kindler",

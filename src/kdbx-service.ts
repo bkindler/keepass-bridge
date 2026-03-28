@@ -59,7 +59,7 @@ export class KdbxService {
 
         const error = await this.unlockWithPassword(password);
         if (error) {
-            new Notice(`KeePass Bridge: ${error}`, 10000);
+            new Notice(`KeePass bridge: ${error}`, 10000);
             return false;
         }
         return true;
@@ -189,7 +189,7 @@ export class KdbxService {
 
         this.sessionTimer = setTimeout(() => {
             this.lock();
-            new Notice('KeePass Bridge: session expired, database locked');
+            new Notice('KeePass bridge: session expired, database locked');
         }, duration);
     }
 }
