@@ -93,3 +93,95 @@
     border-radius: 4px;
     background-color: var(--background-modifier-error);
 }
+
+/* KeePass Vault View Styles */
+.keepass-vault-container {
+    padding: 10px;
+}
+
+.keepass-vault-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.keepass-vault-header h2 {
+    margin: 0;
+}
+
+.keepass-vault-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.keepass-vault-icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.keepass-vault-icon-btn:hover {
+    color: var(--text-normal);
+    background: var(--interactive-hover);
+}
+
+.keepass-vault-table-container {
+    overflow-x: auto;
+}
+
+.keepass-vault-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.keepass-vault-table th,
+.keepass-vault-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--background-modifier-border);
+    text-align: left;
+}
+
+.keepass-vault-table th {
+    font-weight: bold;
+    color: var(--text-muted);
+}
+
+.keepass-vault-td-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.keepass-vault-action-btn {
+    background: var(--interactive-normal);
+    border: 1px solid var(--background-modifier-border);
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px 6px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.keepass-vault-action-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.keepass-vault-action-btn:hover {
+    background: var(--interactive-hover);
+    color: var(--text-normal);
+}
+
+.keepass-vault-unlock-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+    gap: 1em;
+}
