@@ -4,3 +4,17 @@ main.js
 data.json
 .DS_Store
 docs/
+settings.json
+logs/
+*.log
+.env
+.idea/
+.vscode/
+dist/
+build/
+coverage/
+*.zip
+*.tar.gz
+*.bak
+*.tmp
+*.swp
