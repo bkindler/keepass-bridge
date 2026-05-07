@@ -1,6 +1,6 @@
 # KeePass Bridge
 
-[Read KeePass (.kdbx) databases directly from Obsidian. Look up credentials from your notes without leaving the app.](https://github.com/bkindler/keepass-bridge.git)
+Read KeePass (.kdbx) databases directly from Obsidian. Look up credentials from your notes without leaving the app.
 
 ## Features
 

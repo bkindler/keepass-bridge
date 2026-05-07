@@ -10,11 +10,3 @@ logs/
 .env
 .idea/
 .vscode/
-dist/
-build/
-coverage/
-*.zip
-*.tar.gz
-*.bak
-*.tmp
-*.swp
