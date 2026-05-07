@@ -4,3 +4,9 @@ main.js
 data.json
 .DS_Store
 docs/
+settings.json
+logs/
+*.log
+.env
+.idea/
+.vscode/

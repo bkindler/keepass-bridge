@@ -1,4 +1,4 @@
-import { Notice, Plugin } from 'obsidian';
+import { Notice, Plugin, WorkspaceLeaf } from 'obsidian';
 import { KeePassBridgeSettings, KeePassBridgeSettingTab, DEFAULT_SETTINGS } from './settings';
 import { KdbxService, KeePassEntryInfo } from './kdbx-service';
 import { showCredentialPopup } from './credential-popup';
@@ -6,6 +6,7 @@ import { SearchModal } from './search-modal';
 import { registerInlineProcessor } from './inline-processor';
 import { registerBlockProcessor } from './block-processor';
 import { clearPendingClipboard } from './clipboard';
+import { VaultView, VAULT_VIEW_TYPE } from './vault-view';
 
 export default class KeePassBridgePlugin extends Plugin {
     settings: KeePassBridgeSettings = DEFAULT_SETTINGS;
@@ -14,6 +15,12 @@ export default class KeePassBridgePlugin extends Plugin {
     async onload() {
         await this.loadSettings();
         this.kdbxService = new KdbxService(this.app, () => this.settings);
+
+        this.registerView(VAULT_VIEW_TYPE, (leaf) => new VaultView(leaf, this));
+
+        this.addRibbonIcon('lock', 'KeePass Vault', () => {
+            this.activateView();
+        });
 
         this.addSettingTab(new KeePassBridgeSettingTab(this.app, this));
 
@@ -34,6 +41,26 @@ export default class KeePassBridgePlugin extends Plugin {
 
         registerInlineProcessor(this);
         registerBlockProcessor(this);
+    }
+
+    async activateView() {
+        const { workspace } = this.app;
+        
+        let leaf: WorkspaceLeaf | null = null;
+        const leaves = workspace.getLeavesOfType(VAULT_VIEW_TYPE);
+        
+        if (leaves.length > 0) {
+            leaf = leaves[0]!;
+        } else {
+            leaf = workspace.getRightLeaf(false);
+            if (leaf) {
+                await leaf.setViewState({ type: VAULT_VIEW_TYPE, active: true });
+            }
+        }
+        
+        if (leaf) {
+            workspace.revealLeaf(leaf);
+        }
     }
 
     onunload() {

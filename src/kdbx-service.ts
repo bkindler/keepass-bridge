@@ -152,7 +152,7 @@ export class KdbxService {
 
         for (const entry of root.allEntries()) {
             const title = this.getField(entry, 'Title');
-            if (!title) continue;
+            // Allow returning entries even without titles (sometimes people use only URL)
             const passwordField = entry.fields.get('Password');
             results.push({
                 title,
@@ -168,6 +168,42 @@ export class KdbxService {
         }
 
         return results;
+    }
+
+    async addEntry(title: string, userName: string, password: string): Promise<boolean> {
+        if (!this.db) return false;
+
+        try {
+            const group = this.db.getDefaultGroup();
+            const entry = this.db.createEntry(group);
+            entry.fields.set('Title', title);
+            entry.fields.set('UserName', userName);
+            entry.fields.set('Password', kdbxweb.ProtectedValue.fromString(password));
+
+            return await this.saveDatabase();
+        } catch (e) {
+            console.error(e);
+            return false;
+        }
+    }
+
+    async saveDatabase(): Promise<boolean> {
+        if (!this.db) return false;
+
+        const settings = this.getSettings();
+        if (!settings.databasePath) return false;
+
+        try {
+            const dbFile = this.app.vault.getFileByPath(normalizePath(settings.databasePath));
+            if (!dbFile) return false;
+
+            const dbData = await this.db.save();
+            await this.app.vault.modifyBinary(dbFile, dbData);
+            return true;
+        } catch (e) {
+            console.error(e);
+            return false;
+        }
     }
 
     private getField(entry: kdbxweb.KdbxEntry, name: string): string {

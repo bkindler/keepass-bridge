@@ -11,7 +11,6 @@ export function clearPendingClipboard(): void {
 
 export async function copyToClipboard(value: string, label: string, timeoutSeconds: number): Promise<void> {
     await navigator.clipboard.writeText(value);
-    new Notice(`${label} copied to clipboard`);
 
     clearPendingClipboard();
 
