@@ -66,6 +66,9 @@ export class AddEntryModal extends Modal {
                         return;
                     }
                     
+                    btn.setButtonText('Saving...');
+                    btn.buttonEl.disabled = true;
+                    
                     const success = await this.kdbxService.addEntry(this.title, this.userName, this.password);
                     if (success) {
                         new Notice('Entry added successfully');
@@ -73,6 +76,8 @@ export class AddEntryModal extends Modal {
                         this.close();
                     } else {
                         new Notice('Failed to add entry');
+                        btn.setButtonText('Save');
+                        btn.buttonEl.disabled = false;
                     }
                 }));
     }

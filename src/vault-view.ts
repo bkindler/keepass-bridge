@@ -40,7 +40,7 @@ export class VaultView extends ItemView {
         container.addClass('keepass-vault-container');
 
         const headerContainer = container.createDiv({ cls: 'keepass-vault-header' });
-        headerContainer.createEl('h2', { text: '🔐 KeePass Vault' });
+        headerContainer.createEl('h2', { text: 'KeePass Vault' });
 
         const actionsContainer = headerContainer.createDiv({ cls: 'keepass-vault-header-actions' });
         
@@ -61,9 +61,14 @@ export class VaultView extends ItemView {
             unlockContainer.createEl('p', { text: 'Database is locked.' });
             const unlockBtn = unlockContainer.createEl('button', { text: 'Unlock Database', cls: 'mod-cta' });
             unlockBtn.onclick = async () => {
+                unlockBtn.disabled = true;
+                unlockBtn.textContent = 'Unlocking... (this may take a few seconds)';
                 const unlocked = await this.plugin.kdbxService.unlock();
                 if (unlocked) {
                     this.render();
+                } else {
+                    unlockBtn.disabled = false;
+                    unlockBtn.textContent = 'Unlock Database';
                 }
             };
             return;
@@ -105,7 +110,7 @@ export class VaultView extends ItemView {
             };
 
             const copyPwdBtn = tdActions.createEl('button', { cls: 'keepass-vault-action-btn', title: 'Copy Password' });
-            setIcon(copyPwdBtn, 'key');
+            setIcon(copyPwdBtn, 'key-round');
             copyPwdBtn.onclick = async () => {
                 const pwd = entry.getPassword();
                 if (pwd) {
